@@ -15,7 +15,6 @@ class AddUserComponent extends Component {
     this.state = {}
   }
   handleOk = e => {
-    console.log(this.props.form)
     this.props.form.validateFields(async (err, values) => {
       console.log(values)
       values.roleId = +values.roleId;
@@ -44,6 +43,8 @@ class AddUserComponent extends Component {
       <div>
         <Modal
           title="添加用户信息"
+          cancelText={'取消'}
+          okText={'确认'}
           visible={dialogStauts}
           onOk={this.handleOk}
           onCancel={this.handleCancel}

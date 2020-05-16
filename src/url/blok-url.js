@@ -4,7 +4,9 @@ const blokUrl = {
     // 获取类型列表
     getListTypeName: '/api/v1/listTypeName',
     // 删除用户列表信息
-    deleteTypeNameById: '/api/v1/deleteTitleNameById/{id}?id={id}'
+    deleteTypeNameById: '/api/v1/deleteTitleNameById/{id}?id={id}',
+    update: '/api/v1/upDataTitleInfo/{id}?id={id}',
+    getArticleByType: '/api/v1/getArticle/{typeName}?page={page}&size={size}'
 }
 
 export default blokUrl;

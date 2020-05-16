@@ -7,17 +7,27 @@ const BaseUrl = httpLink.baseUrl;
 
 const blokServices = {
     // 添加类型名称
-    async addTypeTitleName(typeInfo) {
+    addTypeTitleName(typeInfo) {
         const url = BaseUrl + blokUrl.addTypeTitleName
-        return await axios.post(url, typeInfo);
+        return axios.post(url, typeInfo);
     },
-    async getListType() {
+    getListType() {
         const url = BaseUrl + blokUrl.getListTypeName;
-        return await axios.get(url)
+        return axios.get(url)
     },
-    async deleteTypeNameById(id) {
+    deleteTypeNameById(id) {
         const url = stringFormatArr(BaseUrl + blokUrl.deleteTypeNameById, { id })
-        return await axios.delete(url);
+        return axios.delete(url);
+    },
+    // 更新类型信息
+    updateTypeInfo(id, info) {
+        const url = stringFormatArr(BaseUrl + blokUrl.update, { id });
+        return axios.put(url, info);
+    },
+    getArticleByTypeId(typeName, page, size) {
+        const url = stringFormatArr(BaseUrl + blokUrl.getArticleByType, { typeName, page, size });
+        return axios.get(url);
     }
+
 }
 export default blokServices;

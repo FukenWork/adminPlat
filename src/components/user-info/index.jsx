@@ -116,7 +116,6 @@ export default class UserInfoComponent extends Component {
     searchUserInfo = async (value) => {
         try {
             let data = await loginServices.findUserInfoByUsername(value, this.state.currentPage, this.state.currentSize);
-            console.log(data.list)
             this.setState({ typeList: [...data.list] });
         } catch (error) {
             await this.getInit(this.state.currentPage, this.state.currentSize)

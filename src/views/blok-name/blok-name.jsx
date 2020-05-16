@@ -6,10 +6,11 @@ import { connect } from 'react-redux';
 import { TitleInfo } from '../../models/title-info';
 import rxevent from 'pubsub-js';
 import EventKeys from '../../common/event-keys';
+import { TYPE_NAME } from '../../common/constants';
 import './index.less';
 
 const { Option } = Select;
-const typeName = ['前端开发', '后端开发'];
+
 
 
 class BlokName extends Component {
@@ -35,7 +36,7 @@ class BlokName extends Component {
     }
 
     renderOption = () => {
-        return typeName.map((e) => {
+        return TYPE_NAME.map((e) => {
             return <Option key={e} value={e}>{e}</Option>
         })
     }
@@ -71,7 +72,7 @@ class BlokName extends Component {
                     <Button type="primary" onClick={this.OpenDialog}>添加</Button>
                 </div>
                 <div className="table">
-                    <BlokNameComponent  refreshData={this.state.refresh}/>
+                    <BlokNameComponent refreshData={this.state.refresh} />
                 </div>
                 {/* 弹窗添加名称 */}
                 <Modal
@@ -93,7 +94,7 @@ class BlokName extends Component {
                                     placeholder="请选择类型"
                                     onChange={this.handleSelectChange}
                                 >
-                                    {this.renderOption(typeName)}
+                                    {this.renderOption(TYPE_NAME)}
                                 </Select>,
                             )}
                         </Form.Item>
@@ -112,6 +113,5 @@ class BlokName extends Component {
 }
 
 export default connect(state => ({
-
     userInfo: state.saveUserInfo
 }), {})(Form.create()(BlokName))

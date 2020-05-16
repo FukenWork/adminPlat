@@ -3,6 +3,8 @@ import blokServices from '../../services/blokServices';
 import { Table, Button, Modal, message } from 'antd';
 import rxEvent from 'pubsub-js';
 import EventKeys from '../../common/event-keys';
+import { roleChange } from '../../utils/util-services';
+import UpdataComponent from './updata/index';
 import './index.less';
 
 
@@ -14,6 +16,12 @@ export default class BlokNameComponent extends Component {
                     pagination={false}
                     rowKey="id"
                     loading={this.state.loading} />
+                <UpdataComponent
+                    typeInfo={this.state.typeInfo}
+                    dialogStauts={this.state.dialogStauts}
+                    closeDailogEmit={() => { this.setState({ dialogStauts: false }) }}
+                    updataDailogEmit={this.handleType}
+                />
             </div>
         )
     }
@@ -25,16 +33,23 @@ export default class BlokNameComponent extends Component {
     }
     async getInit() {
         const data = await blokServices.getListType();
-        if(data) {
+        data.forEach(e => {
+            e.roleName = roleChange(+e.createdRoleId);
+        });
+        if (data) {
             this.setState({
                 typeList: [...data]
             })
         }
     }
+    handleType = async e => {
+        this.setState({dialogStauts: false});
+        await this.getInit();
+    }
     getColun = (index, item) => {
         return <span>
-            <Button type="primary" onClick={this.deleteIndex.bind(index, item)}>删除</Button>
-            <Button type="danger" className="right_button">编辑</Button>
+            <Button type="danger" onClick={this.deleteIndex.bind(index, item)}>删除</Button>
+            <Button type="primary" className="right_button" onClick={this.handleUpdate.bind(index, item)}>编辑</Button>
         </span>
     }
     deleteIndex = (e) => {
@@ -52,6 +67,9 @@ export default class BlokNameComponent extends Component {
             },
         });
     }
+    handleUpdate = (e) => {
+        this.setState({ typeInfo: e, dialogStauts: true });
+    }
     constructor(props) {
         super(props)
         this.state = {
@@ -61,12 +79,14 @@ export default class BlokNameComponent extends Component {
             currentPage: 1,
             currentSize: 4,
             visible: false,
+            dialogStauts: false,
             total: 0,
+            typeInfo: {},
             columns: [
                 { title: '类型', dataIndex: 'titleType' },
                 { title: '名称', dataIndex: 'titleName' },
                 { title: '添加人', dataIndex: 'createdPerson' },
-                { title: '角色', dataIndex: 'createdRoleId' },
+                { title: '角色', dataIndex: 'roleName' },
                 { title: '操作', dataIndex: 'operate', width: 200, render: (item, index) => this.getColun(item, index) },
             ]
         }
