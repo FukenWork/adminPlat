@@ -5,7 +5,7 @@ const menuList = [{
     index: '1'
 },
 {
-    title: "博客种类",
+    title: "仓库信息",
     icon: 'team',
     path: '/blok-name',
     index: '2'

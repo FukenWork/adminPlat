@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Table, Button, Modal, Pagination, message, Input } from 'antd';
-import './index.less';
-import loginServices from '../../services/loginServices';
-import { roleChange } from '../../utils/util-services';
-import AddUserComponent from './add-user/index';
+import React, { Component } from 'react'
+import { Table, Button, Modal, Pagination, message, Input } from 'antd'
+import './index.less'
+import loginServices from '../../services/loginServices'
+import AddUserComponent from './add-user/index'
+import StringName from '../../common/string-name'
 
 const { Search } = Input
 
@@ -15,22 +15,21 @@ export default class UserInfoComponent extends Component {
                     {/* 操作用户 */}
                     <Button className="button" size="large" type="primary" onClick={() => { this.setState({ dialogStauts: true }) }}>添加</Button>
                     <div className="searchInput">
-                    <Search
-                        placeholder="input search username"
-                        enterButton="模糊查询"
-                        size="large"
-                        onSearch={this.searchUserInfo}
-                    />
+                        <Search
+                            placeholder="input search username"
+                            enterButton="模糊查询"
+                            size="large"
+                            onSearch={this.searchUserInfo}
+                        />
                     </div>
                     <AddUserComponent
                         dialogStauts={this.state.dialogStauts}
                         sendEmit={() => { this.setState({ dialogStauts: false }) }}
-                        refreshEmit={ this.handleRefreshData }
+                        refreshEmit={this.handleRefreshData}
                     />
                     {/* 用户数据 */}
-                    <Table bordered dataSource={this.state.typeList} columns={this.state.columns}
+                    <Table bordered row-key="id" dataSource={this.state.typeList} columns={this.state.columns}
                         pagination={false}
-                        rowKey="id"
                         loading={this.state.loading} />
                     <div className="page_size">
                         <Pagination
@@ -55,8 +54,11 @@ export default class UserInfoComponent extends Component {
             currentSize: 10,
             typeList: [],
             columns: [
-                { title: '姓名', dataIndex: 'userName' },
-                { title: '角色', dataIndex: 'roleId', render: (item, index) => roleChange(item) },
+                { title: '姓名', dataIndex: 'username' },
+                { title: '角色', dataIndex: 'roleId' },
+                { title: '邮箱', dataIndex: 'email' },
+                { title: '电话', dataIndex: 'phone' },
+                { title: '手机类型', dataIndex: 'phoneModel' },
                 { title: '操作', dataIndex: 'operate', width: 200, render: (item, index) => this.getColoum(item, index) },
             ],
             dialogStauts: false
@@ -81,11 +83,15 @@ export default class UserInfoComponent extends Component {
         </span>
     }
     deleteUserInfo = (item, index) => {
-        console.log(item)
+        // 自己不能删除自己
+        let userInfo = JSON.parse(localStorage.getItem(StringName.USERINFO))
+        if (userInfo._id === item._id) {
+            return message.warning('删除失败')
+        }
         Modal.confirm({
             title: '确认删除',
             onOk: async () => {
-                const result = await loginServices.deleteUserInfoById(item.id);
+                const result = await loginServices.deleteUserInfoById(item._id);
                 if (result) {
                     message.success('删除成功');
                     await this.getInit(this.state.currentPage, this.state.currentSize);
@@ -114,11 +120,12 @@ export default class UserInfoComponent extends Component {
      * 模糊查询
      */
     searchUserInfo = async (value) => {
-        try {
-            let data = await loginServices.findUserInfoByUsername(value, this.state.currentPage, this.state.currentSize);
-            this.setState({ typeList: [...data.list] });
-        } catch (error) {
+        if (!value.trim()) {
+            message.warning('参数不能为空')
             await this.getInit(this.state.currentPage, this.state.currentSize)
+        } else {
+            let data = await loginServices.findUserInfoByUsername(value)
+            this.setState({ typeList: [...data] });
         }
     }
 }

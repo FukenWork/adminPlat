@@ -13,7 +13,7 @@ class SideMenu extends Component {
         return (
             <div>
                 <div className="logo" >
-                    BlokAdmin
+                    STORE
                 </div>
                 {this.rendeMenu(menuList)}
             </div>

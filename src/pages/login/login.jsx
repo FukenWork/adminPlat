@@ -4,6 +4,7 @@ import { Form, Icon, Input, Button, Checkbox, message} from 'antd';
 import { handleSaveUserInfo } from '../../redux/actions';
 import { connect } from 'react-redux';
 import loginServices from '../../services/loginServices';
+import StringName from '../../common/string-name';
 
 
 class login extends Component {
@@ -64,12 +65,11 @@ class login extends Component {
         // 取出提交数据
         this.props.form.validateFields(async (err, values) => {
             if (!err) {
-                let data = await loginServices.loginByUserNameAndPassword(values.username, values.password);
-                // console.log(data);
+                let data = await loginServices.login(values.username, values.password);
                 if (data || data !== undefined) {
-                    localStorage.setItem('userInfo', JSON.stringify(data.userEntity));
+                    localStorage.setItem(StringName.USERINFO, JSON.stringify(data));
                     // 路由跳转
-                    this.props.handleSaveUserInfo(data.userEntity);
+                    this.props.handleSaveUserInfo(data);
                     this.props.history.replace('/userInfo');
                     message.success(data.message);
                 } else {

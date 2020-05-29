@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Form, Input, message } from 'antd'
-import loginServices from '../../../services/loginServices';
-import userSatus from '../../../common/user.config';
+import loginServices from '../../../services/loginServices'
 
 class AddUserComponent extends Component {
   static propTypes = {
@@ -17,10 +16,9 @@ class AddUserComponent extends Component {
   handleOk = e => {
     this.props.form.validateFields(async (err, values) => {
       console.log(values)
-      values.roleId = +values.roleId;
       if (!err) {
         let data = await loginServices.registorUser(values);
-        if(data.code === userSatus.REGISTER_SUCCESS) {
+        if(data) {
           message.success('添加成功');
           // 通知父组件刷新
           this.props.refreshEmit();
@@ -50,17 +48,17 @@ class AddUserComponent extends Component {
           onCancel={this.handleCancel}
         >
           <Form  onSubmit={this.handleSubmit} className="login-form">
-            <Form.Item>
-              {getFieldDecorator('userName', {
+            <Form.Item label="用户名">
+              {getFieldDecorator('username', {
                 rules: [{ required: true, message: '请输入用户名' },
                 { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文，数字，下划线组成' }],
               })(
                 <Input
-                  placeholder="userName"
+                  placeholder="username"
                 />
               )}
             </Form.Item>
-            <Form.Item>
+            <Form.Item label="密码">
               {getFieldDecorator('password', {
                 rules: [{ required: true, message: '请输入密码' },
                 ],
@@ -70,9 +68,10 @@ class AddUserComponent extends Component {
                 />
               )}
             </Form.Item>
-            <Form.Item>
+            <Form.Item label="手机号码">
               {getFieldDecorator('phone', {
                 rules: [{ required: true, message: '请输入手机号码' },
+                { pattern: /^((\+)?86|((\+)?86)?)0?1[3458]\d{9}$/, message: '请输入正确手机号码' }
                ],
               })(
                 <Input
@@ -80,12 +79,30 @@ class AddUserComponent extends Component {
                 />
               )}
             </Form.Item>
-            <Form.Item>
+            <Form.Item label="角色">
               {getFieldDecorator('roleId', {
                 rules: [{ required: true, message: '请输入角色' },],
               })(
                 <Input
                   placeholder="roleId"
+                />
+              )}
+            </Form.Item>
+            <Form.Item label="邮箱">
+              {getFieldDecorator('email', {
+                rules: [{ required: true, message: '请输入邮箱' },],
+              })(
+                <Input
+                  placeholder="email"
+                />
+              )}
+            </Form.Item>
+            <Form.Item label="手机类型">
+              {getFieldDecorator('phoneModel', {
+                rules: [{ required: true, message: '请输入手机类型' },],
+              })(
+                <Input
+                  placeholder="phoneModel"
                 />
               )}
             </Form.Item>

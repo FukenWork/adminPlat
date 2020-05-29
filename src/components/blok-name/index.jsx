@@ -3,7 +3,6 @@ import blokServices from '../../services/blokServices';
 import { Table, Button, Modal, message } from 'antd';
 import rxEvent from 'pubsub-js';
 import EventKeys from '../../common/event-keys';
-import { roleChange } from '../../utils/util-services';
 import UpdataComponent from './updata/index';
 import './index.less';
 
@@ -33,9 +32,6 @@ export default class BlokNameComponent extends Component {
     }
     async getInit() {
         const data = await blokServices.getListType();
-        data.forEach(e => {
-            e.roleName = roleChange(+e.createdRoleId);
-        });
         if (data) {
             this.setState({
                 typeList: [...data]

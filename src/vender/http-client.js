@@ -1,8 +1,21 @@
-import axios from 'axios';
-// import qs from 'qs';
-import rxevent from 'pubsub-js';
-import EventKeys from '../common/event-keys';
+import axios from 'axios'
+import { message } from 'antd'
 
+/**
+ * 超时时间
+ */
+
+axios.defaults.timeout = 15000;
+
+/**
+ * 请求次数
+ */
+axios.defaults.retry = 3;
+
+/**
+ * 请求间隙
+ */
+axios.defaults.retryDelay = 1000;
 
 /**
  * 请求参数的拦截
@@ -22,20 +35,33 @@ axios.interceptors.request.use((config) => {
     return config
 })
 
-
 /**
- * 请求相应拦截
+ * 相应拦截器
  */
-axios.interceptors.response.use((res) => {
-    return res.data;
-}, (error) => {
-    if(error.response === undefined) {
-        // 服务错误
-        rxevent.publish(EventKeys.SERVICES_ERROR, true);
-        return;
-    }
-    if(error.response.status === 400) {
-        // 请求参数错误
-        rxevent.publish(EventKeys.SERVICES_PARAMS, true);
-    }
-})
+axios.interceptors.response.use(
+    response => {
+        return response.data
+    },
+    err => {
+        console.log(err.response);
+        if (err.response) {
+            switch (err.response.status) {
+                case 401:
+                    message.error('没有授权')
+                    break;
+                case 400:
+                    message.error('参数错误')
+                    break;
+                case 404:
+                    message.error('请求路径错误')
+                    break;
+                case 500:
+                    messge.error('服务器错误')
+                default:
+                    break;
+            }
+        } else {
+            message.error('服务器错误')
+        }
+        return Promise.reject(err)
+    })

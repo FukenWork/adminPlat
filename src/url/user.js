@@ -1,11 +1,16 @@
 const UserInfoUrl = {
     // 用户登录
-    userLoginUserNameAndPassword: '/api/v1/login/{userName}/{password}',
-    getUserInfoList: '/api/v1/userInfo/{page}/{size}?page={page}&size={size}',
-    getUserInfoByName: '/api/v1/findByUserName/{userName}/{page}/{size}?page={page}&size={size}',
-    delteUserInfoById: '/api/v1/deleteUser/{id}',
-    register: '/api/v1/userInfo',
-    findUserByUser: '/api/v1/findByUserName/{userName}/{page}/{size}?page={page}&size={size}'
+    login: '/api/v1/username/{username}/password/{password}',
+
+    getPageAndSize: '/api/v1/getUserInfoBypageAndSize/{page}/{size}?page={page}&size={size}',
+
+    searchUserByUsername: '/api/v1/username/{username}',
+
+    deleteUserById: '/api/v1/{id}',
+
+    register: '/api/v1/save'
+
+
 }
 
 export default UserInfoUrl

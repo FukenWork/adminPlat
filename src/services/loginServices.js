@@ -6,23 +6,18 @@ const BaseUrl = httpLink.baseUrl;
 
 const loginServices = {
     // 用户信息登录
-    oginByUserNameAndPassword(userName, password) {
-        const url = stringFormatArr(`${BaseUrl}${UserInfoUrl.userLoginUserNameAndPassword}`, { userName, password });;
+    login(username, password) {
+        const url = stringFormatArr(`${BaseUrl}${UserInfoUrl.login}`, { username, password });;
         return axios.get(url);
     },
     // 获取用户信息分页
     getUserInfoListByPageAndSize(page, size) {
-        const url = stringFormatArr(`${BaseUrl}${UserInfoUrl.getUserInfoList}`, { page, size });
-        return axios.get(url);
-    },
-    // 根据名字模糊查询用户
-    getUserInfoByUserName(username, page, size) {
-        const url = stringFormatArr(BaseUrl + UserInfoUrl.getUserInfoByName, { username, page, size });
+        const url = stringFormatArr(`${BaseUrl}${UserInfoUrl.getPageAndSize}`, { page, size });
         return axios.get(url);
     },
     // 注销用户
     deleteUserInfoById(id) {
-        const url = stringFormatArr(BaseUrl + UserInfoUrl.delteUserInfoById, { id });
+        const url = stringFormatArr(BaseUrl + UserInfoUrl.deleteUserById, { id });
         return axios.delete(url);
     },
     // 用户注册
@@ -31,8 +26,8 @@ const loginServices = {
         return axios.post(url, userInfo);
     },
     // 模糊查询用户
-    findUserInfoByUsername(userName, page, size) {
-        const url = stringFormatArr(BaseUrl + UserInfoUrl.findUserByUser, { userName, page, size });
+    findUserInfoByUsername(username) {
+        const url = stringFormatArr(BaseUrl + UserInfoUrl.searchUserByUsername, { username });
         return axios.get(url);
     }
 }

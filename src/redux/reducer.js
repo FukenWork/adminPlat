@@ -19,7 +19,7 @@ function saveUserInfo(state = '', action) {
         case ActionType.SAVE_USERINFO:
             return state = action.data;
         default:
-            return state
+            return state || {}
     }
 }
 
